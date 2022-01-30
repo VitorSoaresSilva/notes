@@ -2,15 +2,14 @@ import styled from "styled-components";
 
 export const Container = styled.div`
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-direction: column;
+    flex-direction: column; 
+    background-color: #c287e8;
     h1{
-        padding: 3rem;
-        color:#ff4545;
+        text-align:center;
+        padding: 1rem;
         font-family: Roboto, sans-serif;
+        background-color: #e6adec;
     }
-    
 `;
 
 export const Content = styled.div`

@@ -5,7 +5,7 @@ import { ThemeProvider } from "styled-components"
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      <title>Grimoire</title>
+      <title>Notes</title>
       <ThemeProvider theme={theme}>
         <GlobalStyles/>
         <Component {...pageProps} />

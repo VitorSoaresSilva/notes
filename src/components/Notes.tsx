@@ -1,86 +1,49 @@
-import { Body, Card, Container, Header } from "@/styles/components/Notes";
-import { useEffect, useState } from "react";
-import Cookies from 'js-cookie';
-
-
-interface INotes{
-    content: string;
-    created_at: Date;
+import { Body, Container, Header } from "@/styles/components/Notes";
+import { useState } from "react";
+import { INotes } from "./NotesHome";
+import { BiTrash, BiPencil,BiSave } from "react-icons/bi";
+interface Props{
+    note: INotes,
+    id: number,
+    exclude: Function,
+    edit: Function
 }
 
-export default function Notes({initialData}){
-    const [notes,setNotes] = useState<INotes[]>(initialData ? JSON.parse(initialData).notesData : []);
-    const [editing,setEditing] = useState(-1);
-    const [contentEditing, setContentEditing] = useState("");
-    useEffect(()=>{
-        Cookies.set('notesData',JSON.stringify({notesData:notes}))
-    },[notes])
+export default function Notes({note,id,exclude,edit}: Props){
+    const [editMode,setEditMode] = useState(false);
+    const [editedValue,setEditedValue] = useState("");
     return (
-        <Container>
+        <Container color={note.color} key={note.created_at + " " + note.created_at.toString()}>
             <Header>
-                <button onClick={createNote}>+</button>
+                <div className="info">
+                    <span>Created at: {note.created_at}</span>
+                    <span>Last edit at: {note.last_edit}</span>
+                </div>
+                <div>
+                    <button onClick={()=>exclude(id)}><BiTrash size={18}/></button>
+                    <button onClick={handleEditMode}><BiPencil size={18}/></button>
+                </div>
             </Header>
+            <hr />
             <Body>
-                {notes.map((note,index)=>{
-                    return(
-                        <Card key={note.created_at.toString() + index}>
-                            {editing === index?
-                                <div>
-                                    <textarea 
-                                        name="content" 
-                                        value={contentEditing} 
-                                        rows={4}
-                                        cols={30}
-                                        onChange={(e)=>setContentEditing(e.target.value)}/>
-                                    <button onClick={salvar}>Salvar</button>
-                                </div>
-                                :
-                                <div>
-                                    <div className="button-container">
-                                        <button onClick={()=>edit(index)}>Editar</button>
-                                        <button onClick={()=>deleteNote(index)}>X</button>
-                                    </div>
-                                    <p>{note.content}</p>
-                                </div>
-                            }
-                        </Card>
-                    )
-                })}
+                {editMode? 
+                    <div>
+                        <textarea value={editedValue} onChange={(e)=>setEditedValue(e.target.value)}/>
+                        <button onClick={handleSave}><BiSave size={18}/></button>
+                    </div>
+                :
+                    <p>{note.content}</p>
+                }
             </Body>
         </Container>
     )
-
-    function createNote(){
-        let newNote = {
-            content: "",
-            created_at: new Date()
-        }
-        setNotes([...notes, newNote]);
-        console.log(notes.length)
-        edit(notes.length,newNote)
+    function handleEditMode(){
+        setEditMode(true);
+        setEditedValue(note.content)
     }
-    function salvar(){
-        let state = notes;
-        state[editing].content = contentEditing;
-        setContentEditing("");
-        setNotes(state);
-        setEditing(-1);
-    }
-    function deleteNote(index){
-        let state = notes;
-        state = state.filter((a,b)=> b !== index )
-        setNotes(state)
-    }
-    function edit(index,note = {}){
-        setEditing(index)
-        console.log(index)
-        console.log(note)
-        console.log(notes[index])
-        if(note === {}){
-            setContentEditing(notes[index].content)
-        }
-        else{
-            setContentEditing("")
-        }
+    function handleSave(){
+        setEditMode(false)
+        edit(id,editedValue)
+        setEditedValue("");
     }
 }
