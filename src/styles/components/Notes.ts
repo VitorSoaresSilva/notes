@@ -2,11 +2,10 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
     background: ${props => props.color};
-    width: 20rem;
     border-radius: 1rem;
     padding: 1rem;
-    margin:10px 0px;
-
+    margin:5px 0px;
+    width: 60%;
     hr{
         border-top: 2px solid #fff;
     }
@@ -15,18 +14,21 @@ export const Container = styled.div`
         padding: 3px;
         margin-left: 3px;
     }
+    @media (min-width: 600px) {
+        max-width: 400px !important;
+    }
 
 `;
 export const Header = styled.div`
     display: flex;
     flex-direction: row;
     justify-content:space-between;
+    margin-bottom: 5px;
     .info{
         font-size: 0.85rem;
         display: flex;
         flex-direction:column;
-    }
-    
+    }  
 `;
 
 export const Body = styled.div`

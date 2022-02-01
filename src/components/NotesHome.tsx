@@ -10,18 +10,10 @@ export interface INotes{
     last_edit: string;
     color:string;
 }
-
-const noteStyle = {
-    background: "#fff",
-    margin: "5px",
-    padding: "5px",
-};
 export default function NotesHome({initialData}){
     const [notes,setNotes] = useState<INotes[]>(initialData? JSON.parse(initialData).notesData : [])
     const colors = ["#f7b32b","#f72c25","#a9e5bb"];
     useEffect(()=>{
-        console.log(initialData)
-        console.log("oi")
         Cookies.set('notesData',JSON.stringify({notesData:notes}))
     },[notes])
     return(
